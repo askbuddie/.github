@@ -1,0 +1,27 @@
+name: Update Ask Buddie Roadmap
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-to-project:
+    name: Add issues to project board
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate Ask Buddie token
+        id: askbuddie_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.ASKBUDDIE_APP_ID }}
+          private_key: ${{ secrets.ASKBUDDIE_PRIVATE_KEY }}
+
+      - name: Assign issue to board
+        uses: actions/add-to-project@v0.4.0
+        with:
+          project-url: "https://github.com/orgs/askbuddie/projects/3"
+          github-token: ${{ steps.askbuddie_token.outputs.token }}
+          labeled: private
+          label-operator: NOT
